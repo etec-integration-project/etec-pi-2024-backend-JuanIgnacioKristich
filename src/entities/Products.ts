@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, BaseEntity } from 'typeorm';
 
 @Entity()
-export class User extends BaseEntity {
+export class Products extends BaseEntity {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -10,10 +10,10 @@ export class User extends BaseEntity {
     firstname: string;
 
     @Column()
-    Email: string;
+    Price: number;
 
     @Column()
-    Password:string;
+    img: string;
 
     @Column({
         default: true

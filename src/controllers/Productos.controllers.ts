@@ -1,32 +1,34 @@
 import { Request, Response } from 'express';
-import { User } from '../entities/User';
+import {Products} from "../entities/Products"
 
-export const createUser = async (req: Request, res: Response) => {
+export const createProducts = async (req: Request, res: Response) => {
 
     try {
-        const { firstname, Email, Password} = req.body;
+        const { firstname, Price, img } = req.body;
 
-        const user = new User();
-        user.firstname = firstname;
-        user.Email = Email;
-        user.Password = Password;
+        const prod = new Products();
+        prod.firstname = firstname;
+        prod.Price = Price;
+        prod.img = img;
 
-        await user.save();
+        await prod.save();
 
-        return res.json(user);
+        return res.json(prod);
     } catch (error) {
         if (error instanceof Error) {
             return res.status(400).json({ message: error.message });
         }
     }
 
+
+
 }
 
-export const getUsers = async (req: Request, res: Response) => {
+export const getProducts = async (req: Request, res: Response) => {
 
     try {
-        const users = await User.find();
-        return res.json(users);
+        const prod = await Products.find();
+        return res.json(prod);
     } catch (error) {
         if (error instanceof Error) {
             return res.status(400).json({ message: error.message });
@@ -34,16 +36,16 @@ export const getUsers = async (req: Request, res: Response) => {
     }
 }
 
-export const updateUser = async (req: Request, res: Response) => {
+export const updateProducts = async (req: Request, res: Response) => {
 
     try {
         const { id } = req.params;
 
-        const user = await User.findOneBy({ id: parseInt(req.params.id) });
+        const prod = await Products.findOneBy({ id: parseInt(req.params.id) });
 
-        if (!user) return res.status(404).json({ message: 'User does not exist' });
+        if (!prod) return res.status(404).json({ message: 'prod does not exist' });
 
-        await User.update({ id: parseInt(id) }, req.body);
+        await Products.update({ id: parseInt(id) }, req.body);
 
         return res.sendStatus(204);
 
@@ -54,12 +56,14 @@ export const updateUser = async (req: Request, res: Response) => {
     }
 }
 
-export const deleteUser = async (req: Request, res: Response) => {
+
+
+export const deleteProducts = async (req: Request, res: Response) => {
 
     try {
         const { id } = req.params;
 
-        const result = await User.delete({ id: parseInt(id) });
+        const result = await Products.delete({ id: parseInt(id) });
 
         if (result.affected === 0) {
             return res.status(400).json({ message: 'User not found' });
@@ -75,14 +79,14 @@ export const deleteUser = async (req: Request, res: Response) => {
 
 }
 
-export const getUser = async (req: Request, res: Response) => {
+export const getProduct = async (req: Request, res: Response) => {
 
     try {
         const { id } = req.params;
 
-        const user = await User.findOneBy({ id: parseInt(id) });
+        const prod = await Products.findOneBy({ id: parseInt(id) });
 
-        return res.json(user);
+        return res.json(prod);
 
     } catch (error) {
         if (error instanceof Error) {
