@@ -4,7 +4,7 @@ services:
     backend.mysql:
         image: mysql:latest
         ports:
-            - 3306:3306
+            - 3307:3306
         volumes:
             - ./data:/var/lib/mysql
             - /etc/localtime:/etc/localtime:ro
@@ -25,6 +25,18 @@ services:
             - '8978:8978'
         volumes:
             - ./cloudbeaver:/opt/cloudbeaver/workspace
+        networks:
+            - backend
+
+    back.app:
+        build: 
+            context: .
+        depends_on:
+            - backend.mysql
+        links:
+            - backend.mysql
+        ports:
+            - "3000:3000"
         networks:
             - backend
 
