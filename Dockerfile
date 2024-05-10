@@ -14,10 +14,13 @@ USER node
 
 RUN npm install -g npm
 RUN npm install
-RUN npm run dev
+RUN npm install express
+RUN npm install typeorm
+RUN npm install dotenv
+
 
 COPY . .
 
 EXPOSE 3000
 
-CMD [ "node", "index.js", npm start ]
+CMD [ "npm", "start" ]
