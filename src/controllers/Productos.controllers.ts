@@ -20,8 +20,33 @@ export const createProducts = async (req: Request, res: Response) => {
         }
     }
 
+}
 
+export const createArrayProducts = async (req: Request, res: Response) => {
+    try {
+        // Verificar si la solicitud contiene un array de productos
+        if (!Array.isArray(req.body)) {
+            return res.status(400).json({ message: 'Se esperaba un array en el cuerpo de la solicitud.' });
+        }
 
+        // Procesar cada producto del array recibido
+        const savedProducts = await Promise.all(req.body.map(async (product: any) => {
+            const { firstname, Price, img } = product;
+            const prod = new Products();
+            prod.firstname = firstname;
+            prod.Price = Price;
+            prod.img = img;
+            return await prod.save(); // Guardar el producto y devolverlo
+        }));
+
+        return res.json(savedProducts); // Devolver los productos guardados
+    } catch (error) {
+        if (error instanceof Error) {
+            return res.status(400).json({ message: error.message });
+        } else {
+            return res.status(500).json({ message: 'Ocurrió un error interno del servidor.' });
+        }
+    }
 }
 
 export const getProducts = async (req: Request, res: Response) => {
