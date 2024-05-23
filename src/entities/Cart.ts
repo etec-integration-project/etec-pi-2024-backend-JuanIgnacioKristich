@@ -9,6 +9,18 @@ export default class Cart {
     @Column()
     cart: string;
 
+    @Column()
+    firstname: string;
+
+    @Column()
+    Price: number;
+
+    @Column()
+    img: string;
+
+    @Column()
+    quantity: number;
+
     constructor(cart: string) {
         this.cart = cart;
     }
