@@ -48,6 +48,18 @@ curl -X POST -H "Content-Type: application/json" -d '[
     }
 ]' http://(SUIP):3000/api/products_array
 
+
+Ejecutar el siguiente codigo para probar el controlador de "usuarios", con esto probamos el ingreso de datos "register"
+
+
+curl -X POST -H "Content-Type: application/json" -d '{
+  "firstname": "John",
+  "Email": "john@example.com",
+  "Password": "password123"
+}' http://(SUIP):3000/api/users
+
 ejecutar desde su navegador web 
 http://(SUIP):3000/api/products
+
+http://(SUIP):3000/api/users
 
