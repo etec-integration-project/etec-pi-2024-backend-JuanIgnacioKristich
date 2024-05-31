@@ -58,6 +58,12 @@ curl -X POST -H "Content-Type: application/json" -d '{
   "Password": "password123"
 }' http://(SUIP):3000/api/users
 
+Ejecutar el siguiente comando para ver la validacion de datos en el Login:
+
+curl -X POST -H "Content-Type: application/json" -d '{ "firstname": "John", "Email": "john@example.com", "Password": "password123" }' http://(SUIP):3000/api/users
+
+curl -X POST -H "Content-Type: application/json" -d '{ "firstname": "John", "Email": "john@example.com", "Password": "pepe150" }' http://(SUIP):3000/api/users
+
 ejecutar desde su navegador web 
 http://(SUIP):3000/api/products
 
