@@ -2,7 +2,7 @@ import { DataSource } from 'typeorm';
 import { User } from './entities/User';
 import express from 'express';
 import { Products } from './entities/Products';
-import Cart from './entities/Cart';
+import {Cart} from './entities/Cart';
 import { config } from 'dotenv';
 
 const app = express();
@@ -31,4 +31,5 @@ export const AppDataSource = new DataSource({
     logging: true,
     synchronize: true,
 })
+
 

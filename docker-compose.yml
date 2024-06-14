@@ -6,7 +6,7 @@ services:
         ports:
             - 3307:3306
         volumes:
-            # - /var/lib/mysql
+            - /var/lib/mysql
             - /etc/localtime:/etc/localtime:ro
             - /etc/timezone:/etc/timezone:ro
         restart: always
