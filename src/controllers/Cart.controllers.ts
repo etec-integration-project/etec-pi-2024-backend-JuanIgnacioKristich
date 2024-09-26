@@ -1,73 +1,35 @@
-// // src/controllers/cartController.ts
-// import { Repository } from 'typeorm';
-// import { Cart } from '../entities/Cart';
-// import { Products } from '../entities/Products';
+import { Response } from 'express';
+import { Request } from 'express';
+import { createConnection, Connection } from 'typeorm';
+import { AppDataSource } from '../db';
+import Cart from "../entities/Cart" 
 
-// // Función para agregar productos al carrito
-// // src/controllers/Cart.controllers.ts
-// import { Request, Response } from 'express';
-// import { getRepository } from 'typeorm';
 
-// // Función para agregar productos al carrito
-// export const addToCart = async (req: Request, res: Response) => {
-//     const { cartName, firstname, productId, quantity } = req.body;
 
-//     const cartRepository = getRepository(Cart);
-//     const productRepository = getRepository(Products);
+let connection: Connection | null = null;
 
-//     try {
-//         const product = await productRepository.findOne({ where: { id: productId } });
-//         if (!product) {
-//             return res.status(404).json({ message: 'Product not found' });
-//         }
+export const getDatabaseConnection = async (): Promise<Connection> => {
+  if (!connection || !connection.isConnected) {
+    connection = await createConnection();
+  }
+  return connection;
+};
 
-//         const existingCartItem = await cartRepository.findOne({
-//             where: { cart: cartName, firstname, img: product.img }
-//         });
+export const registerCart = async (req: Request, res: Response) => {
+    const { jsonifiedCart } = req.body;
 
-//         if (existingCartItem) {
-//             existingCartItem.quantity += quantity;
-//             existingCartItem.price += product.Price * quantity;
-//             await cartRepository.save(existingCartItem);
-//             return res.json(existingCartItem);
-//         }
+    try {
+        const connection = await getDatabaseConnection();
+        const cartEntity = new Cart(jsonifiedCart);
 
-//         const cartItem = new Cart(cartName);
-//         cartItem.firstname = firstname;
-//         cartItem.price = product.Price * quantity;
-//         cartItem.img = product.img;
-//         cartItem.quantity = quantity;
+        await AppDataSource.manager.save(Cart, cartEntity);
 
-//         await cartRepository.save(cartItem);
-//         return res.json(cartItem);
-//     } catch (error) {
-//         if (error instanceof Error) {
-//             return res.status(500).json({ message: error.message });
-//         } else {
-//             return res.status(500).json({ message: 'An unknown error occurred' });
-//         }
-//     }
-// };
+        return res.status(201).json({ message: 'Carrito registrado exitosamente' });
 
-// // Función para obtener los items del carrito
-// export const getCartItems = async (req: Request, res: Response) => {
-//     const { cartName, firstname } = req.query;
+    } catch (err) {
+        console.error('Error al registrar el carrito:', err);
+        return res.status(500).json({ error: 'Error interno del servidor' });
+    }  
+};
 
-//     const cartRepository = getRepository(Cart);
 
-//     try {
-//         const cartItems = await cartRepository.find({
-//             where: {
-//                 cart: cartName as string,
-//                 firstname: firstname as string
-//             }
-//         });
-//         return res.json(cartItems);
-//     } catch (error) {
-//         if (error instanceof Error) {
-//             return res.status(500).json({ message: error.message });
-//         } else {
-//             return res.status(500).json({ message: 'An unknown error occurred' });
-//         }
-//     }
-// };

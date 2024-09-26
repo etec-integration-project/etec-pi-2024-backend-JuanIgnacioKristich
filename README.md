@@ -5,7 +5,7 @@ hacer los siguientes pasos
 git clone "https://github.com/etec-integration-project/etec-pi-2024-backend-JuanIgnacioKristich.git"
     "si es necesario"
     username "JuanIgnacio"
-    Password "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"
+    Password "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"
 
 
 cd etec-pi-2024-backend-JuanIgnacioKristich.git
@@ -48,24 +48,6 @@ curl -X POST -H "Content-Type: application/json" -d '[
     }
 ]' http://(SUIP):3000/api/products_array
 
-
-Ejecutar el siguiente codigo para probar el controlador de "usuarios", con esto probamos el ingreso de datos "register"
-
-
-curl -X POST -H "Content-Type: application/json" -d '{
-  "firstname": "John",
-  "Email": "john@example.com",
-  "Password": "password123"
-}' http://(SUIP):3000/api/users
-
-Ejecutar el siguiente comando para ver la validacion de datos en el Login:
-
-curl -X POST -H "Content-Type: application/json" -d '{ "firstname": "John", "Email": "john@example.com", "Password": "password123" }' http://(SUIP):3000/api/users
-
-curl -X POST -H "Content-Type: application/json" -d '{ "firstname": "John", "Email": "john@example.com", "Password": "pepe150" }' http://(SUIP):3000/api/users
-
 ejecutar desde su navegador web 
 http://(SUIP):3000/api/products
-
-http://(SUIP):3000/api/users
 

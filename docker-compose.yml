@@ -6,7 +6,7 @@ services:
         ports:
             - 3307:3306
         volumes:
-            - /var/lib/mysql
+            # - /var/lib/mysql
             - /etc/localtime:/etc/localtime:ro
             - /etc/timezone:/etc/timezone:ro
         restart: always
@@ -28,7 +28,7 @@ services:
             - DATABASE_PASSWORD=root
             - DATABASE_HOST=backend.mysql
         ports:
-            - "3000:3000"
+            - "5000:5000"
         restart: always
         networks:
             - backend
