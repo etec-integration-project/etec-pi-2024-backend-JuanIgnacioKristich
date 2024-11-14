@@ -9,14 +9,12 @@ WORKDIR /app
 
 COPY package*.json ./
 RUN chmod -R 777 /app
+RUN npm install
 
 USER node
 
 RUN npm install -g npm
-RUN npm install
-RUN npm install express
-RUN npm install typeorm
-RUN npm install dotenv
+
 
 
 COPY . .

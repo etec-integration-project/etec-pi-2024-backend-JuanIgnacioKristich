@@ -5,8 +5,10 @@ import { Products } from './entities/Products';
 import Cart from './entities/Cart';
 import { config } from 'dotenv';
 
+
 const app = express();
 const port = 5000;
+
 
 config();
 const database = process.env.DATABASE_NAME
