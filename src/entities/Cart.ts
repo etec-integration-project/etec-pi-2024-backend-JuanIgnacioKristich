@@ -7,9 +7,9 @@ export class Cart extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    // @ManyToMany(() => Products)
-    // @JoinTable()
-    // products: Products[];
+    @ManyToMany(() => Products)
+    @JoinTable()
+    products: Products[];
 
     @Column({
         length: 512
