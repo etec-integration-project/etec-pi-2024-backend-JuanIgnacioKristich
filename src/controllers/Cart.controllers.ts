@@ -1,35 +1,56 @@
-import { Response } from 'express';
-import { Request } from 'express';
-import { createConnection, Connection } from 'typeorm';
-import { AppDataSource } from '../db';
-import Cart from "../entities/Cart" 
+import { Request, Response } from 'express';
+import { Cart } from '../entities/Cart'; // Con export { Cart }
+import { Products } from '../entities/Products';
 
+export class CartController {
 
+    // Agregar productos al carrito
+    async addToCart(req: Request, res: Response) {
+        try {
+            const { userId, productIds } = req.body;
 
-let connection: Connection | null = null;
+            // Obtener los productos seleccionados por su id
+            const products = await Products.findByIds(productIds);
 
-export const getDatabaseConnection = async (): Promise<Connection> => {
-  if (!connection || !connection.isConnected) {
-    connection = await createConnection();
-  }
-  return connection;
-};
+            if (products.length === 0) {
+                return res.status(404).json({ message: 'No products found' });
+            }
 
-export const registerCart = async (req: Request, res: Response) => {
-    const { jsonifiedCart } = req.body;
+            // Crear un nuevo carrito y agregarle los productos
+            const cart = new Cart();
+            cart.userId = userId;
+            cart.products = products;
+            await cart.save();
 
-    try {
-        const connection = await getDatabaseConnection();
-        const cartEntity = new Cart(jsonifiedCart);
+            return res.status(200).json({ message: 'Products added to cart', cart });
+        } catch (error) {
+            return res.status(500).json({ message: 'Error adding products to cart', error });
+        }
+    }
 
-        await AppDataSource.manager.save(Cart, cartEntity);
+    // Comprar productos (vaciar el carrito)
+    async buy(req: Request, res: Response) {
+        try {
+            const { userId } = req.body;
 
-        return res.status(201).json({ message: 'Carrito registrado exitosamente' });
+            // Obtener el carrito del usuario
+            const cart = await Cart.findOne({
+                where: { userId },
+                relations: ['products']
+            });
 
-    } catch (err) {
-        console.error('Error al registrar el carrito:', err);
-        return res.status(500).json({ error: 'Error interno del servidor' });
-    }  
-};
+            if (!cart || cart.products.length === 0) {
+                return res.status(404).json({ message: 'Your cart is empty' });
+            }
 
+            // Realizar la compra (vaciar carrito)
+            cart.products = [];
+            await cart.save();
+
+            return res.status(200).json({ message: 'Compra satisfecha' });
+        } catch (error) {
+            return res.status(500).json({ message: 'Error completing purchase', error });
+        }
+    }
+}
 

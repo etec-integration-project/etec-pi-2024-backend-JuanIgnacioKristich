@@ -1,15 +1,28 @@
-
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn, BaseEntity } from 'typeorm';
+import { Products } from './Products'; // Asegúrate de que la ruta es correcta
 
 @Entity()
-export default class Cart {
+export class Cart extends BaseEntity {
+
     @PrimaryGeneratedColumn()
-    id!: number;
+    id: number;
+
+    // @ManyToMany(() => Products)
+    // @JoinTable()
+    // products: Products[];
+
+    @Column({
+        length: 512
+    })
+    information: string;
 
     @Column()
-    cart: string;
+    userId: number;
 
-    constructor(cart: string) {
-        this.cart = cart;
-    }
+    @CreateDateColumn()
+    created: Date;
+
+    @UpdateDateColumn()
+    updated: Date;
 }
+

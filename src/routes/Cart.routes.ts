@@ -1,11 +1,12 @@
 import { Router } from 'express';
-import { registerCart} from '../controllers/Cart.controllers';
+import { CartController} from '../controllers/Cart.controllers';
 
 const router = Router();
+const cartController = new CartController();
 
-router.post('/Cart', registerCart);
+router.post('/cart/add', cartController.addToCart);
 
-
+router.post('/cart/buy', cartController.buy);
 
 
 export default router;
