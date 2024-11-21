@@ -4,6 +4,7 @@ import express from 'express';
 import { Products } from './entities/Products';
 import {Cart} from './entities/Cart';
 import { config } from 'dotenv';
+import { CartProduct } from './entities/CartProduct';
 
 
 const app = express();
@@ -29,7 +30,7 @@ export const AppDataSource = new DataSource({
     username: username,
     password: password,
     database: database,
-    entities: [User, Products,Cart],
+    entities: [User, Products,Cart,CartProduct],
     logging: true,
     synchronize: true,
 })
