@@ -10,6 +10,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN chmod -R 777 /app
 RUN npm install
+RUN npm install jsonwebtoken @types/jsonwebtoken --save
+
 
 USER node
 

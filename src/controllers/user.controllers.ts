@@ -22,18 +22,6 @@ export const createUser = async (req: Request, res: Response) => {
 
 }
 
-export const getUsers = async (req: Request, res: Response) => {
-
-    try {
-        const users = await User.find();
-        return res.json(users);
-    } catch (error) {
-        if (error instanceof Error) {
-            return res.status(400).json({ message: error.message });
-        }
-    }
-}
-
 export const updateUser = async (req: Request, res: Response) => {
 
     try {
@@ -75,20 +63,25 @@ export const deleteUser = async (req: Request, res: Response) => {
 
 }
 
-export const getUser = async (req: Request, res: Response) => {
-
+export const getUserDetails = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params;
-
-        const user = await User.findOneBy({ id: parseInt(id) });
-
-        return res.json(user);
-
+      const { userId } = req.params;
+  
+      // Find the user by their ID
+      const user = await User.findOneBy({ id: parseInt(userId) });
+  
+      // If user does not exist, return a 404 error
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      // Return user details (excluding sensitive information like password)
+      const { id, firstname, Email } = user;
+      return res.status(200).json({ id, firstname, Email });
     } catch (error) {
-        if (error instanceof Error) {
-            return res.status(400).json({ message: error.message });
-        }
-
+      if (error instanceof Error) {
+        return res.status(500).json({ message: error.message });
+      }
     }
-
-}
+  };
+  

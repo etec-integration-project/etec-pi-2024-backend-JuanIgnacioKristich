@@ -1,7 +1,6 @@
 import "reflect-metadata";
 import app from './app';
 import { AppDataSource } from './db';
-import { getUsers } from "./controllers/user.controllers";
 import { loadDefaultProducts } from "./controllers/loadDefaultProducts";
 
 
