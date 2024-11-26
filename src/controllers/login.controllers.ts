@@ -12,7 +12,7 @@ export const login = async (req: Request, res: Response) => {
         if (comparador) {
             // Si el usuario existe, generar un token
             const token = jwt.sign(
-                { userId: comparador.id }, // Datos que se incluyen en el token
+                { userId: comparador.userId }, // Datos que se incluyen en el token
                 "tu_llave_secreta", // Llave secreta para firmar el token
                 { expiresIn: "3h" } // Tiempo de expiración del token
             );

@@ -11,6 +11,8 @@ COPY package*.json ./
 RUN chmod -R 777 /app
 RUN npm install
 RUN npm install jsonwebtoken @types/jsonwebtoken --save
+RUN npm install --save-dev @types/bcrypt
+
 
 
 USER node

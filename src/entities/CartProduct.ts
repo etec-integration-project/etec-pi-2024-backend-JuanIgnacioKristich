@@ -1,4 +1,3 @@
-// Nueva Entidad: CartProduct
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, BaseEntity, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Cart } from './Cart';
 import { Products } from './Products';
