@@ -88,6 +88,7 @@
 
 import { Request, Response } from 'express';
 import { User } from '../entities/User';
+import { Repository } from 'typeorm';
 import bcrypt from 'bcrypt';
 
 export const createUser = async (req: Request, res: Response) => {
@@ -167,29 +168,52 @@ export const deleteUser = async (req: Request, res: Response) => {
     }
 };
 
-export const getUserDetails = async (req: Request, res: Response) => {
+export const getUserDetails = async (req: Request, res: Response): Promise<Response> => {
     try {
         console.log('Getting user details with params:', req.params);
-        const { userId: userIdParam } = req.params;
 
-        // Find the user by their ID
-        const user = await User.findOneBy({ userId: parseInt(userIdParam) });
-        console.log('User found:', user);
+        // Obtener y validar el parámetro userId
+        const userIdParam = req.params.userId;
+        if (!userIdParam || isNaN(Number(userIdParam))) {
+            console.error('Invalid or missing userId parameter:', userIdParam);
+            return res.status(400).json({ message: 'Invalid or missing userId parameter' });
+        }
 
-        // If user does not exist, return a 404 error
+        const userId = parseInt(userIdParam, 10); // Convertir el userId a un número entero
+        console.log('Parsed userId:', userId);
+
+        // Buscar el usuario en la base de datos
+        const user = await User.findOneBy({ userId });
         if (!user) {
-            console.log('User not found with ID:', userIdParam);
+            console.warn('User not found with ID:', userId);
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Return user details (excluding sensitive information like password)
-        const { userId, firstname, Email } = user;
-        console.log('Returning user details:', { userId, firstname, Email });
-        return res.status(200).json({ userId, firstname, Email });
+        // Excluir información sensible antes de responder
+        const { userId: id, firstname, Email } = user;
+        console.log('Returning user details:', { userId: id, firstname, Email });
+        return res.status(200).json({ userId: id, firstname, Email });
     } catch (error) {
         console.error('Error getting user details:', error);
-        if (error instanceof Error) {
-            return res.status(500).json({ message: error.message });
-        }
+        return res.status(500).json({
+            message: 'Internal server error',
+            error: error instanceof Error ? error.message : 'Unknown error',
+        });
     }
 };
+
+
+
+
+export const getUser = async (req: Request, res: Response) => {
+
+    try {
+        const prod = await User.find();
+        return res.json(prod);
+    } catch (error) {
+        if (error instanceof Error) {
+            return res.status(400).json({ message: error.message });
+        }
+    }
+}
+  

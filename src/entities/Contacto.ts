@@ -18,6 +18,9 @@ export class Contacto extends BaseEntity {
     @Column()
     mensaje: string;
 
+    @Column()
+    userId:number;
+
     @Column("simple-json")
     carrito: { nombreProducto: string; cantidad: number; precioTotal: number }[];
 
